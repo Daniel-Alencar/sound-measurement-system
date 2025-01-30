@@ -195,5 +195,5 @@ void loop() {
   }
 
   // Pequeno atraso
-  delay(10); 
+  // delay(10); 
 }
