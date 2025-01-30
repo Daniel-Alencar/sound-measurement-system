@@ -3,6 +3,11 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+#define LED_RED 14
+#define LED_YELLOW 12
+#define LED_GREEN 13
+#define BUZZER 27
+
 // GPIO35
 #define MIC_PIN ADC1_CHANNEL_7 
 // Limite de decibéis para som alto
@@ -76,10 +81,19 @@ double piecewise_func(double x) {
 }
 
 
+void setting_for_leds_buzzer() {
+  pinMode(LED_RED, OUTPUT);
+  pinMode(LED_YELLOW, OUTPUT);
+  pinMode(LED_GREEN, OUTPUT);
+  pinMode(BUZZER, OUTPUT);
+}
+
 
 
 void setup() {
   Serial.begin(115200);
+
+  setting_for_leds_buzzer();
 
   // Configura o ADC
   // Resolução de 12 bits
@@ -167,6 +181,9 @@ void loop() {
       display.setCursor(0, 50);
       display.print("ALERTA: Muito alto!");
       display.display();
+
+      digitalWrite(LED_RED, true);
+      digitalWrite(BUZZER, true);
     }
 
     if(useMaxValue) {
