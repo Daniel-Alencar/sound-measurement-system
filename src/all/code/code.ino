@@ -67,7 +67,6 @@ NTPClient timeClient(udp, "pool.ntp.org", 0, 60000);
 const long utcOffsetInSeconds = -3 * 3600;
 
 void setupCloud() {
-  Serial.begin(115200);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
   Serial.print("Conectando ao Wi-Fi");
@@ -169,9 +168,9 @@ void setting_for_leds_buzzer() {
 
 void setup() {
   Serial.begin(115200);
-  setupCloud();
 
   setting_for_leds_buzzer();
+  setupCloud();
 
   // Configura o ADC
   // Resolução de 12 bits
