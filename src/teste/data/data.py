@@ -9,7 +9,7 @@ firebase_admin.initialize_app(cred, {
 })
 
 # Referência para os dados
-ref = db.reference("07-03-2025/dados_microfone")
+ref = db.reference("14-03-2025/dados_microfone")
 dados = ref.get()
 
 # Criar e salvar os dados em um arquivo CSV
