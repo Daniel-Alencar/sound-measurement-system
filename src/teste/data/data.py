@@ -3,7 +3,7 @@ from firebase_admin import credentials, db
 import csv
 
 # Inicialize o Firebase
-cred = credentials.Certificate("project-informations.json")
+cred = credentials.Certificate("informations.json")
 firebase_admin.initialize_app(cred, {
     "databaseURL": "https://nivel-sonoro-default-rtdb.firebaseio.com/"
 })
