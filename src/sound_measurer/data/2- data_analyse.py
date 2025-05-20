@@ -2,6 +2,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import os
+
+# Cria a pasta 'images' se ela não existir
+os.makedirs("graphs", exist_ok=True)
+
 # Configura o estilo dos gráficos
 sns.set(style="whitegrid")
 
@@ -33,7 +38,7 @@ plt.ylabel("Valor do Microfone (dB)")
 plt.xticks(rotation=45)
 plt.tight_layout()
 plt.grid(True)
-plt.savefig("grafico_linha.png")
+plt.savefig("graphs/grafico_linha.png")
 plt.show()
 
 # Histograma
@@ -43,7 +48,7 @@ plt.title("Distribuição da Intensidade Sonora")
 plt.xlabel("Valor do Microfone (dB)")
 plt.ylabel("Frequência")
 plt.tight_layout()
-plt.savefig("histograma.png")
+plt.savefig("graphs/histograma.png")
 plt.show()
 
 # Boxplot
@@ -52,5 +57,5 @@ sns.boxplot(x=df["Valor do Microfone"], color="salmon")
 plt.title("Boxplot da Intensidade Sonora")
 plt.xlabel("Valor do Microfone (dB)")
 plt.tight_layout()
-plt.savefig("boxplot.png")
+plt.savefig("graphs/boxplot.png")
 plt.show()
