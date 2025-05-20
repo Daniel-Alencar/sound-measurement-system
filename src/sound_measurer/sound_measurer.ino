@@ -34,8 +34,8 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #include <WiFiUdp.h>
 
 // Definição do Wi-Fi
-const char* WIFI_SSID = "PNZ_NET - DANIEL";
-const char* WIFI_PASSWORD = "principedapaz";
+const char* WIFI_SSID = "Daniel";
+const char* WIFI_PASSWORD = "senhadowifi";
 
 const char* email = "danielalencar746@gmai.com";
 const char* password = "@nivel-sonoro123";
