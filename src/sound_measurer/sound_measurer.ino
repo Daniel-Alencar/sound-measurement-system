@@ -84,31 +84,41 @@ void setupCloud() {
   timeClient.update();
 }
 
+#include <TimeLib.h>
+
 void sendCloudData(double sensorValue) {
   // Atualiza o tempo
   timeClient.update();
 
   // Obtém a data como timestamp (epoch)
   unsigned long epochTime = timeClient.getEpochTime();
+
+  // Converte epochTime para uma estrutura de tempo
+  struct tm *ptm = gmtime((time_t *)&epochTime);
+
+  // Formata a data como dd-mm-yyyy
+  char dateBuffer[11];
+  snprintf(dateBuffer, sizeof(dateBuffer), "%02d-%02d-%04d", ptm->tm_mday, ptm->tm_mon + 1, ptm->tm_year + 1900);
+  String dateString = String(dateBuffer);
+
+  // Converte epochTime em string para usar como chave
   String timestamp = String(epochTime);
 
-  // Converte para uma string mais legível, por exemplo, "dd-mm-yyyy"
-  String dateString = "14-03-2025";
-
-  // Enviar dados ao Firebase
+  // Enviar valor do sensor
   if (Firebase.RTDB.setFloat(&fbdo, "/" + dateString + "/dados_microfone/" + timestamp + "/microfone", sensorValue)) {
     Serial.println("Dado do sensor enviado com sucesso!");
   } else {
     Serial.println("Falha ao enviar dado: " + fbdo.errorReason());
   }
 
-  // Enviar dados ao Firebase
+  // Enviar hora formatada
   if (Firebase.RTDB.setString(&fbdo, "/" + dateString + "/dados_microfone/" + timestamp + "/data_hora", timeClient.getFormattedTime())) {
     Serial.println("Dado de tempo enviado com sucesso!");
   } else {
     Serial.println("Falha ao enviar dado: " + fbdo.errorReason());
   }
 }
+
 
 
 

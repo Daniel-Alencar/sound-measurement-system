@@ -8,8 +8,10 @@ firebase_admin.initialize_app(cred, {
     "databaseURL": "https://nivel-sonoro-default-rtdb.firebaseio.com/"
 })
 
+day = "14-03-2025"
+
 # Referência para os dados
-ref = db.reference("14-03-2025/dados_microfone")
+ref = db.reference(f"{day}/dados_microfone")
 dados = ref.get()
 
 # Criar e salvar os dados em um arquivo CSV
