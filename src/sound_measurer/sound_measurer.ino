@@ -3,6 +3,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+#include <WiFiManager.h>
+
 #define LED_RED 14
 #define LED_YELLOW 12
 #define LED_GREEN 13
@@ -33,16 +35,7 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
-// Definição do Wi-Fi
-const char* WIFI_SSID = "Daniel";
-const char* WIFI_PASSWORD = "senhadowifi";
-
-const char* email = "danielalencar746@gmai.com";
-const char* password = "@nivel-sonoro123";
-
-// Configuração do Firebase
-#define API_KEY "AIzaSyCVFiI9HEj1sND2vBjMSE0zONs66YEBgKE"
-#define DATABASE_URL "https://nivel-sonoro-default-rtdb.firebaseio.com/" 
+#include "secrets.h"
 
 FirebaseData fbdo;
 FirebaseAuth auth;
@@ -55,23 +48,32 @@ NTPClient timeClient(udp, "pool.ntp.org", 0, 60000);
 // Fuso horário UTC-3 (Brasília)
 const long utcOffsetInSeconds = -3 * 3600;
 
-void setupCloud() {
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
-  Serial.print("Conectando ao Wi-Fi");
-  while (WiFi.status() != WL_CONNECTED) {
-    Serial.print(".");
-    delay(1000);
+void setupWifi() {
+  WiFiManager wm;
+
+  // Tenta conectar automaticamente ao último Wi-Fi conhecido
+  // Se não conseguir, abre portal AP com SSID "ESP_Config"
+  bool res = wm.autoConnect("Nível sonoro", "ic123456");
+
+  if (!res) {
+    Serial.println("Falha ao conectar! Resetando...");
+    ESP.restart();
   }
-  Serial.println("\nConectado ao Wi-Fi!");
+
+  Serial.println("Conectado com sucesso!");
+  Serial.println(WiFi.localIP());
+}
+
+void setupCloud() {
 
   // Configurar o Firebase
-  config.api_key = API_KEY;
-  config.database_url = DATABASE_URL;
+  config.api_key = FIREBASE_API_KEY;
+  config.database_url = FIREBASE_DATABASE_URL;
 
   // Autenticação anônima
-  auth.user.email = email;
-  auth.user.password = password;
+  auth.user.email = FIREBASE_EMAIL;
+  auth.user.password = FIREBASE_PASSWORD;
   
   Firebase.begin(&config, &auth);
   Firebase.reconnectWiFi(true);
@@ -142,7 +144,7 @@ double interpolate_linear(int adc_value) {
   return db_points[0];
 }
 
-void setting_for_leds_buzzer() {
+void setup_leds_buzzer() {
   pinMode(LED_RED, OUTPUT);
   pinMode(LED_YELLOW, OUTPUT);
   pinMode(LED_GREEN, OUTPUT);
@@ -152,7 +154,8 @@ void setting_for_leds_buzzer() {
 void setup() {
   Serial.begin(115200);
 
-  setting_for_leds_buzzer();
+  setup_leds_buzzer();
+  setupWifi();
   setupCloud();
 
   adc1_config_width(ADC_WIDTH_BIT_12);               
