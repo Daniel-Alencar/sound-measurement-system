@@ -11,7 +11,9 @@
 #define BUZZER 27
 
 #define MIC_PIN ADC1_CHANNEL_7 
-#define NOISE_THRESHOLD 80
+#define NOISE_THRESHOLD_HIGH 80
+#define NOISE_THRESHOLD_MEDIUM 70
+
 
 #define useMaxValue true
 #define useAverageValue false
@@ -211,13 +213,23 @@ void loop() {
     display.print(" dB");
     display.display();
 
-    if (decibels >= NOISE_THRESHOLD) {
+    if (decibels >= NOISE_THRESHOLD_HIGH) {
       display.setTextSize(1);
       display.setCursor(0, 50);
       display.print("ALERTA: Muito alto!");
       display.display();
+
+      digitalWrite(LED_GREEN, false);
+      digitalWrite(LED_YELLOW, false);
       digitalWrite(LED_RED, true);
-      digitalWrite(BUZZER, true);
+    } else if(decibels >= NOISE_THRESHOLD_MEDIUM) {
+      digitalWrite(LED_GREEN, false);
+      digitalWrite(LED_RED, false);
+      digitalWrite(LED_YELLOW, true);
+    } else {
+      digitalWrite(LED_RED, false);
+      digitalWrite(LED_YELLOW, false);
+      digitalWrite(LED_GREEN, true);
     }
 
     // Envia dados para a cloud
